@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/PescaFresh" docBase="PescaFresh" reloadable="true"
-	crossContext="true">
-	<Resource name="jdbc/pescafresh" auth="Container" type="javax.sql.DataSource"
-		maxActive="100" maxIdle="30" maxWait="10000" username="pesca_admin"
-		password="1234" driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/pescafresh" />
-</Context>

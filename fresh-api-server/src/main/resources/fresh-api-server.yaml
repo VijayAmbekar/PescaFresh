@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Fresh SeaFood
+  description: Fresh SeaFood
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/techsurfer/fresh-seafood-api/1.0.0
+paths:
+  /city:
+    get:
+      tags:
+        - city
+      summary: Get all cities
+      operationId: getCities
+      responses:
+        '405':
+          description: Invalid input
+
+    post:
+      tags:
+        - city
+      summary: Create a  city
+      operationId: createCity
+      requestBody:
+        $ref: '#/components/requestBodies/City'
+      responses:
+        '405':
+          description: Invalid input
+        '201':
+          description: Created successfully
+
+  '/city/{id}':
+    get:
+      tags:
+        - city
+      summary: Find city by ID
+      description: Returns a single city
+      operationId: getCityById
+      parameters:
+        - name: id
+          in: path
+          description: ID of city to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: City not found
+
+components:
+  schemas:
+    City:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: "Panaji"
+        state:
+          type: string
+          example: "Goa"
+        country:
+          type: string
+          example: "India"
+      xml:
+        name: City
+
+  requestBodies:
+    City:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/City'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/City'
+      description: City object that needs to be added to the store
+      required: true
