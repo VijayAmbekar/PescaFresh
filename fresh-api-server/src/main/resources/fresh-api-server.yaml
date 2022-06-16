@@ -6,7 +6,7 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/techsurfer/fresh-seafood-api/1.0.0
+    url: http://localhost:9099/fresh
 paths:
   /city:
     get:
@@ -61,9 +61,6 @@ paths:
         '201':
           description: Created successfully
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/City'
             application/json:
               schema:
                 $ref: '#/components/schemas/City'
@@ -73,7 +70,7 @@ paths:
       summary: Updates a city
       operationId: updateCity
       requestBody:
-        $ref: '#/components/requestBodies/City'
+        $ref: '#/components/requestBodies/UpdateCity'
       responses:
         '400':
           description: Bad Request
@@ -108,9 +105,6 @@ paths:
         '200':
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/City'
             application/json:
               schema:
                 $ref: '#/components/schemas/City'
@@ -148,11 +142,6 @@ paths:
         '200':
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: integer
-                format: int64
-                example: 30
             application/json:
               schema:
                 type: integer
@@ -190,11 +179,6 @@ paths:
         '200':
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Country'
             application/json:
               schema:
                 type: array
@@ -213,9 +197,6 @@ paths:
         '201':
           description: Created successfully
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Country'
             application/json:
               schema:
                 $ref: '#/components/schemas/Country'
@@ -234,9 +215,6 @@ paths:
         '200':
           description: Updated successfully
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Country'
             application/json:
               schema:
                 $ref: '#/components/schemas/Country'
@@ -260,9 +238,6 @@ paths:
         '200':
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Country'
             application/json:
               schema:
                 $ref: '#/components/schemas/Country'
@@ -300,11 +275,6 @@ paths:
         '200':
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: integer
-                format: int64
-                example: 30
             application/json:
               schema:
                 type: integer
@@ -312,6 +282,142 @@ paths:
                 example: 30
         '404':
           description: Country not found
+
+  /state:
+    get:
+      tags:
+        - state
+      summary: Get all states
+      operationId: getStates
+      parameters:
+        - name: offset
+          in: query
+          description: state offset to fetch data from
+          required: false
+          example: 0
+          schema:
+            type: integer
+            format: int64
+        - name: pageSize
+          in: query
+          description: count of items to return
+          required: false
+          example: 0
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Bad Request
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/State'
+    post:
+      tags:
+        - state
+      summary: Create a state
+      operationId: createState
+      requestBody:
+        $ref: '#/components/requestBodies/State'
+      responses:
+        '400':
+          description: Bad Request
+        '201':
+          description: Created successfully
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/State'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/State'
+    put:
+      tags:
+        - state
+      summary: Updates a state
+      operationId: updateState
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateState'
+      responses:
+        '400':
+          description: Bad Request
+        '405':
+          description: Validation failed
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/State'
+
+  '/state/{id}':
+    get:
+      tags:
+        - state
+      summary: Find state by ID
+      description: Returns a single state
+      operationId: getStateById
+      parameters:
+        - name: id
+          in: path
+          description: ID of state to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/State'
+        '404':
+          description: State not found
+
+    delete:
+      tags:
+        - state
+      summary: Delete state provided by ID
+      description: Delete state
+      operationId: deleteStateById
+      parameters:
+        - name: id
+          in: path
+          description: ID of state to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Country not found
+
+  '/state/count':
+    get:
+      tags:
+        - state
+      summary: Find state count
+      description: Returns count of states
+      operationId: getStateCount
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                example: 30
+        '404':
+          description: State not found
 
 components:
   schemas:
@@ -330,11 +436,33 @@ components:
       xml:
         name: Country
 
+    State:
+      type: object
+      required:
+        - id
+        - name
+        - countryId
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: "Goa"
+        countryId:
+          type: integer
+          format: int64
+          example: "1"
+      xml:
+        name: State
+
     City:
       type: object
       required:
         - name
         - id
+        - stateId
+        - countryId
       properties:
         id:
           type: integer
@@ -342,12 +470,14 @@ components:
         name:
           type: string
           example: "Panaji"
-        state:
-          type: string
-          example: "Goa"
-        country:
-          type: string
-          example: "India"
+        stateId:
+          type: integer
+          format: int64
+          example: "1"
+        countryId:
+          type: integer
+          format: int64
+          example: "1"
       xml:
         name: City
 
@@ -356,6 +486,7 @@ components:
       content:
         application/json:
           schema:
+            $ref: '#/components/schemas/Country'
             type: object
             required:
               - name
@@ -369,6 +500,7 @@ components:
       content:
         application/json:
           schema:
+            $ref: '#/components/schemas/Country'
             type: object
             required:
               - id
@@ -383,15 +515,98 @@ components:
             xml:
               name: UpdateCountry
 
-
+    State:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/State'
+            type: object
+            required:
+              - name
+              - countryId
+            properties:
+              name:
+                type: string
+                example: "India"
+              countryId:
+                type: integer
+                format: int64
+                example: "1"
+            xml:
+              name: State
+    UpdateState:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/State'
+            type: object
+            required:
+              - id
+              - name
+              - countryId
+            properties:
+              id:
+                type: integer
+                format: int64
+              name:
+                type: string
+                example: "India"
+              countryId:
+                type: integer
+                format: int64
+                example: "1"
+            xml:
+              name: UpdateState
 
     City:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/City'
-        application/xml:
+            type: object
+            required:
+              - name
+              - stateId
+              - countryId
+            properties:
+              name:
+                type: string
+                example: "India"
+              stateId:
+                type: integer
+                format: int64
+                example: "1"
+              countryId:
+                type: integer
+                format: int64
+                example: "1"
+            xml:
+              name: City
+    UpdateCity:
+      content:
+        application/json:
           schema:
             $ref: '#/components/schemas/City'
-      description: City object that needs to be added to the store
-      required: true
+            type: object
+            required:
+              - id
+              - name
+              - stateId
+              - countryId
+            properties:
+              id:
+                type: integer
+                format: int64
+              name:
+                type: string
+                example: "India"
+              stateId:
+                type: integer
+                format: int64
+                example: "1"
+              countryId:
+                type: integer
+                format: int64
+                example: "1"
+            xml:
+              name: UpdateCity

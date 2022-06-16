@@ -8,12 +8,10 @@ server:
   servlet:
     context-path: /fresh
 
-#hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
-#
 spring:
   jpa:
   hibernate.ddl-auto: none
   datasource:
-    url: jdbc:mysql://localhost:3307/testdb
-    username: vijay
-    password: vijay123
+    url: jdbc:mysql://localhost:3307/fresh_dev_db
+    username:
+    password:
