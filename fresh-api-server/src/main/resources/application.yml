@@ -1,0 +1,17 @@
+management.endpoints.web.exposure.include: "*"
+management:
+  security:
+    enabled: false
+debug: true
+server:
+  port: 9099
+  servlet:
+    context-path: /fresh
+
+spring:
+  jpa:
+  hibernate.ddl-auto: none
+  datasource:
+    url: jdbc:mysql://localhost:3307/fresh_dev_db
+    username:
+    password:
